@@ -39,7 +39,7 @@ var overlayMaps = {
 }
 
 // Default Map
-var myMap = L.map('map'{
+var myMap = L.map('map', {
   center: [34.0522, -118.2437],
   zoom: 1,
   layers: [satellite_map, earthquakes]
@@ -98,3 +98,19 @@ d3.json(earthquakes_URL, function(earthquakeData) {
     }
   }).addTo(earthquakes);
   earthquakes.addTo(myMap);
+
+  // Legend Setup
+  var legend = L.control({position: 'bottomright'});
+  legend.onAdd = function() {
+    var div = L.DomUtil.create('div', 'info legend'),
+    magnitudeLevels = [0, 1, 2, 3, 4, 5];
+    div.innerHTML += '<h3>Magnitude</h3>'
+    for (var i = 0; i <magnitudeLevels.length; i++){
+      div.innerHTML +=
+          '<i style="background: ' + chooseColor(magnitudeLevels[i] +1) +'"></i> ' + magnitudeLevels[i] + (magnitudeLevels[i + 1] ? '&ndash;' + magnitudeLevels[i + 1] + '<br>' : '+');     
+    }
+    return div;
+  };
+  //Map Legend
+  legend.addTo(myMap);
+});
