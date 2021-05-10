@@ -85,3 +85,16 @@ d3.json(earthquakes_URL, function(earthquakeData) {
           return '#DAF7A6';
       }
     }
+  
+  // Earthquake Data Object
+  L.geoJSON(earthquakeData, {
+    pointTOLayer: function (feature, latlng){
+      return L.circleMarker(latlng);
+    },
+    style: styleInfo,
+    onEachFeature: function(feature, layer){
+      layer.bindPopup('<h4>Location: ' + feature.properties.place + '</h4><hr><p>Date & Time: ' + new Date(feature.properties.time) + '</p><hr><p>Magnitude: ' + feature.properties.mag + '</p>');
+
+    }
+  }).addTo(earthquakes);
+  earthquakes.addTo(myMap);
