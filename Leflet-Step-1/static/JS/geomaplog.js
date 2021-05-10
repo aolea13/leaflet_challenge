@@ -1,42 +1,28 @@
-// Store API endpoint inside query URL
-var query_url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
+// EarthquakesGeo JSON URL Variables
+var earthquakes_URL = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson'
 
-// Perforeme a get request
-d3.jason(query_url, function(data) {
-    create_features(data.features);
-    console.log(data.features)
+// Creat layer group
+var earthquakes = new L.LayerGroup();
+
+// Define Variables for Tile Layers
+var satellite_map = L.titleLayer ('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+  attribution: 'Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>',
+  maxZoom: 15,
+  id: 'mapbox.satellite',
+  accessToken: API_KEY
 });
 
-// Popup Function
-function create_features(earthquake){
-    function on_each_feature(feature, layer)
-        layer.bind_popup("<h3>" + feature.properties.place + "</h3><hr><p>" + new Date(feature.properties.time) + "</p>")
-}
+var grayscaleMap = L.titleLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+  attribution: 'Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>',
+  maxZoom: 15,
+  id: 'mapbox.light',
+  accessToken: API_KEY
+});
 
-// Circle Radius Function
-function radius_size(magnitude){
-    return magnitude * 20000;
-}
-
-// Circle Color Function
-function circle_color(magnitude){
-    if (magnitude < 1) {
-        return "#ccff33"
-    }
-    else if (magnitude < 2) {
-        return "#ffff33"
-      }
-      else if (magnitude < 3) {
-        return "#ffcc33"
-      }
-      else if (magnitude < 4) {
-        return "#ff9933"
-      }
-      else if (magnitude < 5) {
-        return "#ff6633"
-      }
-      else {
-        return "#ff3333"
-      }
-}
+var outdoorsMap = L.titleLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+  attribution: 'Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>',
+  maxZoom: 15,
+  id: 'mapbox.outdoors',
+  accessToken: API_KEY
+});
 
